@@ -28,7 +28,6 @@ namespace IS.Business.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
         public void Given_UserTriedToRemovedItem_When_ItemDoesnotExists_Then_ThrowsAnError()
         {
             AvailableItem item = commonRepo.GetAvailableItems().First();
@@ -38,7 +37,10 @@ namespace IS.Business.Tests
             Mock<InventoryRemoveService> mockService = new Mock<InventoryRemoveService>(commonRepo, userRepo);
             mockService.Setup(m => m.IsItemAvailable(It.IsAny<AvailableItem>(), It.IsAny<User>())).Returns(false);
 
-            mockService.Object.RemoveItemFromUserInventory(model);
+            var ex = Assert.ThrowsException<Exception>(() => mockService.Object.RemoveItemFromUserInventory(model));
+
+            Assert.IsNotNull(ex);
+            Assert.IsTrue(ex.Message.Contains($"There is no {item.Name} to remove", StringComparison.OrdinalIgnoreCase));
         }
 
         [TestMethod]
