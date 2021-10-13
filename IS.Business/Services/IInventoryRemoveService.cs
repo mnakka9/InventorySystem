@@ -12,7 +12,7 @@ namespace IS.Business.Services
     {
         void RemoveItemFromUserInventory(InventoryViewModel viewModel)
         {
-            if(!this.IsItemAvailable(viewModel.AvailableItem, new User()))
+            if (!this.IsItemAvailable(viewModel.AvailableItem, new User()))
             {
                 throw new Exception($"There is no {viewModel.AvailableItem.Name} to remove");
             }
